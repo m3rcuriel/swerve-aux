@@ -3,8 +3,6 @@ package com.m3rcuriel.frc.swerve.util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -60,13 +58,13 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
         this.userSetXTic = false;
         this.userSetYTic = false;
         //TODO allow user tics to limit window size
-        nodeList = new LinkedList<CartesianNode>();
+        nodeList = new LinkedList<>();
 
         addData(xData, yData, lineColor, markerColor);
 
         count++;
         plotFrame = new JFrame("Figure " + count);
-        plotFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        plotFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         titleLabel = plotFrame.getTitle();
         plotFrame.add(this);
         plotFrame.setSize(600, 600);
@@ -76,7 +74,7 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
     }
 
     public void showPlot() {
-        plotFrame.setVisible(plotFrame.isVisible() ? false : true);
+        plotFrame.setVisible(!plotFrame.isVisible());
     }
 
     public void showPlot(boolean show) {
@@ -108,6 +106,7 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
 
             data.x = x.clone();
         }
+
         nodeList.add(data);
     }
 
@@ -157,7 +156,6 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
                     x1 = xPAD + xScale * node.x[j] + lowerXtic * xScale;
                     x2 = xPAD + xScale * node.x[j + 1] + lowerXtic * xScale;
                 }
-
                 double y1 = h - yPAD - yScale * node.y[j] + lowerYtic * yScale;
                 double y2 = h - yPAD - yScale * node.y[j + 1] + lowerYtic * yScale;
                 g2.setPaint(node.lineColor);
@@ -393,9 +391,7 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
 
         JMenuItem item = new JMenuItem("Copy graph");
 
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+        item.addActionListener(ae -> {
                 BufferedImage i = new BufferedImage(plot.getSize().width, plot.getSize().height, BufferedImage.TRANSLUCENT);
                 plot.setOpaque(false);
                 plot.paint(i.createGraphics());
@@ -403,15 +399,13 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
                 Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
                 c.setContents(trans, plot);
             }
-        });
+        );
 
         menu.add(item);
 
         item = new JMenuItem("Desktop ScreenShot");
 
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+        item.addActionListener(ae -> {
                 try {
                     Robot robot = new Robot();
                     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
@@ -424,7 +418,7 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
                     System.exit(1);
                 }
             }
-        });
+        );
 
         menu.add(item);
     }
