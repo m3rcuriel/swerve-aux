@@ -366,13 +366,21 @@ public class SimplePlot extends javax.swing.JPanel implements ClipboardOwner {
     }
 
     private double getMax(double[] data) {
-        Arrays.sort(data);
-        return data[data.length - 1];
+        double max = -Double.MAX_VALUE;
+        for(int i = 0; i < data.length; i++) {
+            if(data[i] > max)
+                max = data[i];
+        }
+        return max;
     }
 
     private double getMin(double[] data) {
-        Arrays.sort(data);
-        return data[0];
+        double min = Double.MAX_VALUE;
+        for(int i = 0; i < data.length; i++) {
+            if(data[i] < min)
+                min = data[i];
+        }
+        return min;
     }
 
     @Override
